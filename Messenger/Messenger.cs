@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Messenger
 {
+    // in case typing is needed, use Messenger<T>
     public static class Messenger
     {
         private static Dictionary<Enum, Action<string>> _listenerDict;
