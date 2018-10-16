@@ -20,39 +20,40 @@ namespace MessengerTest
 
         [Test]
         public void Test() {
-            Action<string> print = (x) => {
+            Action<string> PrintEvent = (x) => {
                 System.Diagnostics.Debug.WriteLine(x);
             };
 
             // Second action to make sure our messenger can be registered with multiple actions.
-            Action<string> print2 = (x) => {
-                System.Diagnostics.Debug.WriteLine($"this is print 2 : {x}");
+            Action<string> OtherEvent = (x) => {
+                System.Diagnostics.Debug.WriteLine($"this is other event : {x}");
             };
 
-            print($"test started");
+            PrintEvent($"test started");
 
-            Messenger.Messenger.Register(MESSAGE_KEY.test, print);
-            Messenger.Messenger.Register(MESSAGE_KEY.test2, print);
-            Messenger.Messenger.Register(MESSAGE_KEY.test2, print2);
-            Messenger.Messenger.Register(MESSAGE_KEY.test3, print);
+            // registering events
+            Messenger.Messenger.Register(MESSAGE_KEY.test, PrintEvent);
+            Messenger.Messenger.Register(MESSAGE_KEY.test2, PrintEvent);
+            Messenger.Messenger.Register(MESSAGE_KEY.test2, OtherEvent);
+            Messenger.Messenger.Register(MESSAGE_KEY.test3, PrintEvent);
 
             // testing simple usage.
-            print($"calling test 0");
+            PrintEvent($"calling test 0");
             Messenger.Messenger.Call(MESSAGE_KEY.test, "test0");
 
             // trying to fire unregistered value.
-            print($"calling test 1");
+            PrintEvent($"calling test 1");
             Messenger.Messenger.Call(MESSAGE_KEY.test1, "test1");
 
             // trying to call multiple subscriber.
-            print($"calling test 2");
+            PrintEvent($"calling test 2");
             Messenger.Messenger.Call(MESSAGE_KEY.test2, "test2");
 
             // making sure previous tests not messing up with simple usage.
-            print($"calling test 3");
+            PrintEvent($"calling test 3");
             Messenger.Messenger.Call(MESSAGE_KEY.test3, "test3");
             
-            Assert.True(print != null);
+            Assert.True(PrintEvent != null);
 
         }
     }
